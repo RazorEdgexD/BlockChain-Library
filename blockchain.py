@@ -210,7 +210,7 @@ class Blockchain:
 
         guess = f'{last_proof}{proof}{last_hash}'.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:5] == "00000"
+        return guess_hash[:4] == "0000"
 
 
 # Instantiate the Node
@@ -222,6 +222,16 @@ node_identifier = str(uuid4()).replace('-', '')
 # Instantiate the Blockchain
 blockchain = Blockchain()
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
+@app.route('/login', methods=['POST'])
+def login():
+    return 'KEK'
 
 @app.route('/mine', methods=['GET'])
 def mine():
@@ -267,21 +277,13 @@ def new_transaction():
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
-@app.route('/book/new', methods=['POST'])
-def new_book():
-    values = request.get_json()
-
-    # Check that the required fields are in the POST'ed data
-    required = ['title', 'isbn', 'location']
-    if not all(k in values for k in required):
-        return 'Missing values', 400
-
-    # Add a new book
-    index = blockchain.new_book(values['title'], values['isbn'], values['location'])
+@app.route('/add', methods=['POST'])
+def add_book():
+    
+    index = blockchain.new_book(request.form["title"], request.form["isbn"], request.form["location"])
 
     response = {'message': f'Book will be added to Block {index}'}
     return jsonify(response), 201
-
 
 @app.route('/chain', methods=['GET'])
 def full_chain():

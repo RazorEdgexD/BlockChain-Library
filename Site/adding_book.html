@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BlockChain Library</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/library.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">BlockChain Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home
+              </a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="adding_book.html">Add Book
+							<span class="sr-only">(current)</span>
+						</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="library.html">Library</a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+		  <h3 class="text-center">Adding your own Book!</h1>
+
+				<form name="idform" action="library.html">
+
+		  <div class="form-group row align-items-center">
+  			<label class="col-3 col-form-label">Book Title:</label>
+  			<div class="col-9">
+  				<input id="title" type="text" class="form-control"  required>
+  			</div>
+  		</div>
+		<div class="form-group row align-items-center">
+		  <label class="col-3 col-form-label">ISBN:</label>
+		  <div class="col-9">
+			  <input id="isbn" type="text" class="form-control required" pattern="[0-9]{13}" title="Enter 13 numbers" required>
+		  </div>
+	  	</div>
+	  	<div class="form-group row align-items-center">
+			<label class="col-3 col-form-label">Location:</label>
+			<div class="col-9">
+				<input id="location" type="text" class="form-control required" required>
+			</div>
+		</div>
+        <button onclick="addBook()" class="btn btn-primary btn-lg btn-block">Add Book</button>
+				</form>
+      </header>
+    </div>
+
+    <footer class="py-3 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; BlockChain Library 2018</p>
+      </div>
+
+    </footer>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+	<script>
+	 function addBook() {
+		 console.log(document.forms["idform"].elements["title"].validity.valueMissing);
+		 console.log(document.forms["idform"].elements["isbn"].validity.valueMissing);
+		 console.log(document.forms["idform"].elements["location"].validity.valueMissing);
+		 console.log(document.forms["idform"].elements["isbn"].value.length);
+		 if (document.forms["idform"].elements["title"].validity.valueMissing == false &&
+	 !document.forms["idform"].elements["isbn"].value == false &&
+	 	!document.forms["idform"].elements["location"].value == false &&
+			document.forms["idform"].elements["isbn"].value.length == 13){
+		$.post(
+  "http://6bcac205.ngrok.io/add",
+  {
+		"title": document.forms["idform"].elements["title"].value,
+		"isbn": document.forms["idform"].elements["isbn"].value,
+		"location": document.forms["idform"].elements["location"].value
+  }
+);
+
+$.getJSON("http://6bcac205.ngrok.io/mine", function(result){
+	 });
+}
+}
+	</script>
+
+</html>
